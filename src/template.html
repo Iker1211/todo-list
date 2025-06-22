@@ -14,14 +14,7 @@
 
                     <!-- Recent Posts -->
                         <section class="box recent-posts">
-                            <header>
-                                <h2>Recent Quests</h2>
-                            </header>
-                            <ul>
-                                <li id="notes-anchor"><a href="#">Notes</a>
-
-                                </li>
-                            </ul>
+                                <h3 id="notes-anchor"><a href="#">Notes</a></h3>
                         </section>
                     <!-- Nav -->
                         <nav id="nav">
@@ -51,9 +44,7 @@
                                         <label for="priority">Priority</label>
                                             <select name="priority" id="priority" required>
                                                 <option value="🚨">Urgente 🚨</option>
-                                                <option value="🔥">Alta 🔥</option>
                                                 <option value="⚡">Media ⚡</option>
-                                                <option value="✅">Baja ✅</option>
                                                 <option value="🌟">Opcional 🌟</option>
                                             </select>
                                     </p>
@@ -64,6 +55,7 @@
                                 </form>
                             </dialog>
                             <button id="new-quest" class="open-dialog">New Quest!</button>
+                            <h3>Quests</h3>
                             <ul id="quest-list">
                                 
                             </ul>
@@ -90,12 +82,7 @@
                                 </div>
                             </form>
                         </dialog>
-        
-                    <!-- Copyright -->
-                        <ul id="copyright">
-                            <li><a rel="noreferrer" target="_blank" href="https://unsplash.com/es/@hoffman11" >Unsplash</a></li>
-                            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-                        </ul>
+            <a rel="noreferrer" target="_blank" href="https://unsplash.com/es/@hoffman11" >Unsplash</a>
         </div>
         <div class="body">
 
@@ -132,7 +119,10 @@
                 <h3 id="quest-name">No Objectives Right Now</h3>
                 <button id="delete-quest">Delete quest</button>
                 <p id="quest-description">Just keep walking</p>
-                <div id="objectives-list"> Objetivos</div>
+                <div id="objectives-list"> Objetivos
+                    
+                </div>
+                <!-- <button class="delete-obj"><img src="./assets/images/trash.svg" width="20px" height="auto"></button> -->
             </div>
         </div>
         <!-- <div class="rightSide">4</div> -->

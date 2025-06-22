@@ -87,8 +87,11 @@ input:valid, textarea:valid {
       "leftSide body body" 1fr
       / auto 1fr;
 
-      button {
+      #sidebar button {
         width: 50%;
+      }
+
+      button {
         height: 2rem;
         margin: auto;
         padding: 5px;
@@ -121,9 +124,9 @@ input:valid, textarea:valid {
       & >  #sidebar {
         min-height: 100vh;
         grid-area: leftSide;
-        color: rgba(255, 255, 255, 0.55);
+        color: rgba(255, 255, 255, 255);
         text-shadow: -1px -1px 0px rgba(0, 0, 0, 0.5);
-        width: 14em;
+        width: 25vw;
         padding: 3em 1.35em 1em 1.15em;
         background-color: var(--violet);
         overflow-y: auto;
@@ -175,7 +178,7 @@ input:valid, textarea:valid {
     }
 
     #sidebar a {
-        color: #d4dde0;
+        color: rgba(255, 255, 255, 255);
         text-decoration: none;
     }
 
@@ -208,6 +211,7 @@ input:valid, textarea:valid {
 
     #notes-panel {
       display: none;
+      margin-top: 1rem;
 
       & > .notes-grid {
         padding: 0;
@@ -258,10 +262,6 @@ input:valid, textarea:valid {
         cursor: pointer;
         font-size: 1rem;
       }
-
-      #new-note {
-        width: 100%;
-      }
     }
 
     .notes-controls {
@@ -272,7 +272,7 @@ input:valid, textarea:valid {
     #objectives-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: 1fr auto 1fr;
+      grid-template-rows: auto auto 1fr;
       gap: 10px;
       /* Define grid areas for more control */
       grid-template-areas:
@@ -286,7 +286,24 @@ input:valid, textarea:valid {
         }
 
         #objectives-list {
+          width: 100%;
           grid-area: bottom;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .objective {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          /* background-color: yellow; */
+          position: relative;
+        }
+
+        .delete-obj {
+          background-color: red;
+          margin: 1px;
         }
     }
  }

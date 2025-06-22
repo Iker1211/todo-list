@@ -3,6 +3,10 @@
  import "./assets/css/reset.css";
  import "./assets/css/styles.css";
 
+ import trash from "./assets/images/trash.svg" 
+
+import { formatDistance, formatDistanceToNow, subDays, format, roundToNearestHours } from "date-fns";
+
 import Note from "./notes/notes.js";
 import Objective from "./objectives/objective.js";
 import Quest from "./quests/quest.js";
@@ -51,10 +55,7 @@ document.addEventListener("click", (event) => {
 
         // Verifica si el clic ocurrió dentro del área del pseudo-elemento
         if (clickX >= pseudoElementX && clickY <= pseudoElementSize) {
-            
             delete_note(postItId);
-            notes_panel.innerHTML = "";
-            display_notes();
             // Aquí puedes manejar la lógica para eliminar el post-it
             // postIt.remove();
         }
@@ -138,14 +139,17 @@ function update_listeners() {
 
 make_list(); // ?
 
-function display_notes(last_note) {
+function display_notes() {
 
-    if (!last_note) {
+    notes_grid.innerHTML = "";
+
         notes.forEach((note) => {
             const post_it = document.createElement("div");
             const post_title = document.createElement("h3");
             const post_body = document.createElement("p");
     
+            console.log(typeof post_it);
+
             post_title.textContent = note.title;
             post_body.textContent = note.body;
             post_it.classList.add("post-it");
@@ -155,34 +159,22 @@ function display_notes(last_note) {
             notes_grid.appendChild(post_it);
 
         });
-    } else {
-        const post_it = document.createElement("div");
-        const post_title = document.createElement("h3");
-        const post_body = document.createElement("p");
-    
-        post_title.textContent = last_note.title;
-        post_body.textContent = last_note.body;
-        post_it.classList.add("post-it");
-        post_it.id = last_note.title;
-        post_it.appendChild(post_title);
-        post_it.appendChild(post_body);
-        notes_grid.appendChild(post_it);
-
-        console.log(post_it.id);
-    }
 }
 
 display_notes();
 
+// let delete_obj_btns = document.querySelectorAll(".delete-obj");
 let quest_objectives = document.getElementById("objectives-list");
 
-const add_quest_to_obj_options = (quest) => { //Esto tal vez debería ser desde el array de quests
-    const select_quest = document.getElementById("select-quest");
+quest_objectives.addEventListener("click", (event) => {
+    if (event.target.closest(".delete-obj")) {
+        console.log("did", event.target.closest(".delete-obj"));
+        // Aquí puedes llamar a tu función de borrado
+    }
+});
 
-    let option = document.createElement("option");
-    option.textContent = quest.name;
-    select_quest.appendChild(option);
-};
+// console.log("this is typeof ",  delete_obj_btns, typeof delete_obj_btns)
+// make it an array
 
 let refresh_quest_options = function() {
     const select_quest = document.getElementById("select-quest");
@@ -199,12 +191,51 @@ quests.forEach((quest) => {
     display_quest(quest);
 })
 
+let formated_date = function (obj) {
+    let dateObject = new Date(obj.dueDate)
+    const result = formatDistanceToNow( dateObject )
+    return "expires in" + " " + result
+}
+
 function display_objectives(quest) {
+
+    let dataCounter = 0; //???
     quest_objectives.innerHTML = "";
+
     quest.objectives.forEach((objective) => {
+
+        // creating the delete obj btn
+        let deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete-obj");
+        let deleteImage = document.createElement("img");
+        deleteImage.src = trash;
+        deleteImage.width = "20";
+        deleteImage.height = "20";
+
+        deleteButton.appendChild(deleteImage);
+
+        // creating the obj item itself
         let item = document.createElement("li");
-        item.innerHTML = objective.title;
+
+        let title = document.createElement("p");
+        title.innerHTML = objective.title;
+
+        let priority = document.createElement("p");
+        priority.innerHTML = objective.priority;
+
+        let dueDate = document.createElement("p");
+        dueDate.innerHTML = formated_date(objective)
+        item.appendChild(title);
+        item.appendChild(priority);
+        item.appendChild(dueDate);
+        item.appendChild(deleteButton);
+        item.classList.add("objective");
+        item.dataset.index = dataCounter++;
+
+        console.log(deleteButton.parentElement);
+        
         quest_objectives.appendChild(item);
+        console.log(formated_date(objective))
     })
 };
 
@@ -242,7 +273,6 @@ function delete_quest(quest_title) {
             notes_panel.style.display = "none";
         }
 
-        console.log(`Quest "${quest_title}" eliminada correctamente.`);
     } else {
         console.log(`Quest "${quest_title}" no encontrada.`);
     }
@@ -291,7 +321,6 @@ function add_quest() {
         event.preventDefault();
 
         let last_quest = create_new_quest();
-
         if (!last_quest) {
             return;
         }
@@ -310,6 +339,7 @@ function add_quest() {
             updateNotesLocalStorage();
         }
     })
+    display_notes();
   }
 
 function updateNotesLocalStorage() {
@@ -358,7 +388,7 @@ function add_note() {
         }
 
         updateNotesLocalStorage();
-        display_notes(last_note);
+        display_notes();
         console.log(last_note);
     });
 };
@@ -386,12 +416,7 @@ Array.from(open_dialog).forEach((btn) => {
     });
 });
 
-
 let obj_title_input = document.getElementById("obj-title");
-
-
-let something = new Objective("title", "description", "2023-10-01", "high", ["item1", "item2"], "quest1");
-console.table(something);
  
 function link_objective_to_quest() {
 
@@ -403,23 +428,27 @@ const obj_description = document.getElementById("obj-description");
 const obj_due_date = document.getElementById("duedate");
 const priority = document.getElementById("priority");
 
+obj_due_date.value = format(new Date(), "yyyy-MM-dd"); // Set default due date to today
+
 let objs_form = document.getElementById("objective-form");
+
+function check_obj() { //
+
+}
 
 function updateObjsLocalStorage() {
     localStorage.setItem("objectives", JSON.stringify(objectives));
 }
 
-let callItMagic = Array.from(select_quest.querySelectorAll("option"));
+function delete_objective(objective) {
+    const objExists = objectives.some((obj) => obj.title === objective.title);
 
-let yabi = callItMagic.map((option) => {
-    return option.textContent;
-})
-
-console.log("so, now", yabi)
-
-obj_due_date.addEventListener("input", () => {
-    console.log("selected duedate:", obj_due_date.value);
-})
+    if (objExists) {
+        objectives.splice(objective, 1);
+        updateObjsLocalStorage();
+        console.log("esta es la array de objectives", objectives);
+    }
+}
 
 function add_objective() {
 
@@ -434,14 +463,6 @@ function add_objective() {
         };
 
         const objExists = objectives.some((obj) => obj.title === formData.title);
-        if (objExists) {
-            alert("amigo sigue caminando");
-
-            modals[0].style.display = "none";
-            modals[0].close();
-
-            return null;
-        }
 
         let new_obj = create_objective(formData);
         objectives.push(new_obj);
@@ -462,25 +483,25 @@ function add_objective() {
         event.preventDefault();
 
         let last_obj = create_new_objective();
+        formated_date(last_obj);
 
         if (!last_obj) {
             return;
         }
 
-        updateObjsLocalStorage
-        // display_notes(last_note);
+        updateObjsLocalStorage();
         montage_to_quest(last_obj);
-        // console.table(objectives);
-        // console.table(quests);
-        // display_objectives(quests[0]);
+
+        quests.forEach((quest) => {
+            if (quest.name === last_obj.quest) {
+                display_quest(quest)
+            } 
+        })
+
+        console.log("esta es la array objectives antes de borrar un obj", objectives);
+
     });
 };
-
-// console.log("this is an array of the options", callItMagic);
-
-// callItMagic.forEach((quest) => {
-//     if quest.
-// }) 
 
 add_note();
 add_objective();
@@ -488,9 +509,7 @@ add_quest();
 
 /* 
 So now the pending tasks are:
-4. Write logic to add objectives to quests => Formate dates, if necessary (in objectives)
-3. Copycat notes. How to display each note, maybe adding a ruled class. 
-5. Display objectives & notes
-6. You can filtrate objectives based on dueDate up, dueDate down, priority
+1. check objectives & delete them
+2. Refactorizar
 7. @media queries
 */
