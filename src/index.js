@@ -189,14 +189,32 @@ function delete_objective(title) { //This will be passed to the listener
     })
 }
 
+function check_objective(title, mark) { // good
+
+    const objIndex = objectives.findIndex((objective) => objective.title === title);
+
+    if (objIndex !== -1) {
+        objectives[objIndex].checklist++;
+    }
+
+    if (objectives[objIndex].checklist % 2 === 0) {
+        mark.style.textDecoration = "none";
+    } else {
+        mark.style.textDecoration = "line-through";
+    }
+}
+
 quest_objectives.addEventListener("click", (event) => {
     if (event.target.closest(".delete-obj")) {
 
         let obj_title = event.target.closest(".delete-obj").parentNode.children[1].innerText
 
         delete_objective(obj_title)
+    } else if (event.target.closest(".checkbox")) {
+        let obj_title = event.target.closest(".checkbox").parentNode.children[1].innerText
+        let mark = event.target.closest(".checkbox").parentNode.children[1]
 
-        // Aquí puedes llamar a tu función de borrado
+        check_objective(obj_title, mark);
     }
 });
 
@@ -233,6 +251,7 @@ function display_objectives(quest) {
 
         let checkbox = document.createElement("input");
         checkbox.setAttribute("type", "checkbox")
+        checkbox.classList.add("checkbox");
 
         // creating the delete obj btn
         let deleteButton = document.createElement("button");
@@ -249,7 +268,6 @@ function display_objectives(quest) {
 
         let title = document.createElement("p");
         title.innerHTML = objective.title;
-        title.style.textDecoration = "line-through"; // ?
 
         let priority = document.createElement("p");
         priority.innerHTML = objective.priority;
@@ -472,21 +490,6 @@ function updateObjsLocalStorage() {
     localStorage.setItem("objectives", JSON.stringify(objectives));
 }
 
-
-
-function check_objective(objective) { // good
-
-    objective.checklist++
-
-        console.log(objective.checklist)
-
-    if (objective.checklist % 2 === 0) {
-        console.log("no está hecho aún")
-    } else {
-        console.log("ya está hecho")
-    }
-}
-
 function add_objective() {
 
     function create_new_objective() {
@@ -538,10 +541,6 @@ function add_objective() {
         console.log("esta es la array objectives antes de borrar un obj", objectives);
 
         console.log("lets see", last_obj.checklist)
-
-        for (let i = 0; i < 5; i++) { //?
-            check_objective(last_obj);
-        }
     });
 };
 
@@ -552,7 +551,7 @@ add_quest();
 /* 
 So now the pending tasks are:
 1. check objectives & delete them // use the two functions. 
-    // Sólo falta unir en el delete y hacer el listener y unir en el check
+ y hacer el listener y unir en el check
 2. Refactorizar
 7. @media queries
 */
