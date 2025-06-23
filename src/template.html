@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>todo-list</title>
 </head>
 <body>
     <section class="layout">
-        <!-- <div class="header">1</div> -->
         <div id="sidebar">
         				<!-- Logo -->
 					<h1 id="logo"><a href="#"><img src="./assets/images/wordmarks.svg" rel="wordmark"></img></a></h1>
 
-                    <!-- Recent Posts -->
                         <section class="box recent-posts">
                                 <h3 id="notes-anchor"><a href="#">Notes</a></h3>
                         </section>
@@ -20,7 +18,7 @@
                         <nav id="nav">
                             <button id="new-objective" class="open-dialog"><p>Add Objective</p></button>
                             <dialog class="modal">
-                                <h3>New Requirement 🪖</h3>
+                                <h3>New Objective 🪖</h3>
                                 <form id="objective-form" action="" method="dialog">
                                     <p>
                                         <label for="quest">For</label>
@@ -49,7 +47,7 @@
                                             </select>
                                     </p>
                                     <div class="form-buttons-container">
-                                        <button type="submit" class="close-modal">Add Requirement</button>
+                                        <button type="submit" class="close-modal">Add</button>
                                         <button type="reset" id="cancel-obj" class="close-modal">Cancel</button>
                                     </div>
                                 </form>
@@ -77,12 +75,12 @@
                                     <textarea placeholder="max 250 char." type="text" id="description" required name="description" max="250"></textarea>
                                 </p> <!--por qué ma no funciona-->
                                 <div class="form-buttons-container">
-                                    <button type="submit" class="close-modal">Add Quest</button>
+                                    <button type="submit" class="close-modal">Add</button>
                                     <button type="reset" id="cancel" class="close-modal">Cancel</button>
                                 </div>
                             </form>
                         </dialog>
-            <a rel="noreferrer" target="_blank" href="https://unsplash.com/es/@hoffman11" >Unsplash</a>
+            <a rel="noreferrer" target="_blank" href="https://unsplash.com/es/@paulearlephotography" >Unsplash</a>
         </div>
         <div class="body">
 
@@ -125,7 +123,6 @@
 
             </div>
         </div>
-        <!-- <div class="rightSide">4</div> -->
     </section>
 </body>
 </html>

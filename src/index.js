@@ -236,7 +236,7 @@ quests.forEach((quest) => {
     display_quest(quest);
 })
 
-let formated_date = function (obj) {
+function  formated_date(obj) {
     let dateObject = new Date(obj.dueDate)
     const result = formatDistanceToNow( dateObject )
     return "expires in" + " " + result
@@ -273,7 +273,8 @@ function display_objectives(quest) {
         priority.innerHTML = objective.priority;
 
         let dueDate = document.createElement("p");
-        dueDate.innerHTML = formated_date(objective)
+        dueDate.innerHTML = formated_date(objective);
+        dueDate.classList.add("due-date");
         item.appendChild(checkbox);
         item.appendChild(title);
         item.appendChild(priority);
@@ -502,8 +503,6 @@ function add_objective() {
             quest: select_quest.value,
         };
 
-        const objExists = objectives.some((obj) => obj.title === formData.title);
-
         let new_obj = create_objective(formData);
         objectives.push(new_obj);
         return new_obj;
@@ -550,6 +549,15 @@ add_quest();
 
 /* 
 So now the pending tasks are:
+
+1. Solucionar el problema del check con objectives del mismo nombre
+2. Modal de cada objective
+
+
 2. Refactorizar
+3. modales
+4. css obj item
+5. Filtrar según prioridad, fecha  
 7. @media queries
+8. icons
 */
