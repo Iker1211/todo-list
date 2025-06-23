@@ -550,8 +550,6 @@ add_quest();
 
 /* 
 So now the pending tasks are:
-1. check objectives & delete them // use the two functions. 
- y hacer el listener y unir en el check
 2. Refactorizar
 7. @media queries
 */
