@@ -300,7 +300,7 @@ input:valid, textarea:valid {
           /* background-color: yellow; */
           position: relative;
         }
-
+ 
         .delete-obj {
           background-color: red;
           margin: 1px;

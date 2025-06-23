@@ -166,9 +166,36 @@ display_notes();
 // let delete_obj_btns = document.querySelectorAll(".delete-obj");
 let quest_objectives = document.getElementById("objectives-list");
 
+function delete_objective(title) { //This will be passed to the listener
+
+    const objIndex = objectives.findIndex((objective) => objective.title === title);
+    if (objIndex !== -1) {
+        objectives.splice(objIndex, 1);
+        updateObjsLocalStorage();
+    }
+
+    quests.forEach((quest) => {
+        if (quest.name === quest_name.textContent ) {
+
+            const questObjIndex = quest.objectives.findIndex((obj) => obj.title === title);
+            if (questObjIndex !== -1) {
+                quest.objectives.splice(questObjIndex, 1);
+            }
+
+            display_quest(quest);
+
+
+        }
+    })
+}
+
 quest_objectives.addEventListener("click", (event) => {
     if (event.target.closest(".delete-obj")) {
-        console.log("did", event.target.closest(".delete-obj"));
+
+        let obj_title = event.target.closest(".delete-obj").parentNode.children[1].innerText
+
+        delete_objective(obj_title)
+
         // Aquí puedes llamar a tu función de borrado
     }
 });
@@ -204,6 +231,9 @@ function display_objectives(quest) {
 
     quest.objectives.forEach((objective) => {
 
+        let checkbox = document.createElement("input");
+        checkbox.setAttribute("type", "checkbox")
+
         // creating the delete obj btn
         let deleteButton = document.createElement("button");
         deleteButton.classList.add("delete-obj");
@@ -219,12 +249,14 @@ function display_objectives(quest) {
 
         let title = document.createElement("p");
         title.innerHTML = objective.title;
+        title.style.textDecoration = "line-through"; // ?
 
         let priority = document.createElement("p");
         priority.innerHTML = objective.priority;
 
         let dueDate = document.createElement("p");
         dueDate.innerHTML = formated_date(objective)
+        item.appendChild(checkbox);
         item.appendChild(title);
         item.appendChild(priority);
         item.appendChild(dueDate);
@@ -440,13 +472,18 @@ function updateObjsLocalStorage() {
     localStorage.setItem("objectives", JSON.stringify(objectives));
 }
 
-function delete_objective(objective) {
-    const objExists = objectives.some((obj) => obj.title === objective.title);
 
-    if (objExists) {
-        objectives.splice(objective, 1);
-        updateObjsLocalStorage();
-        console.log("esta es la array de objectives", objectives);
+
+function check_objective(objective) { // good
+
+    objective.checklist++
+
+        console.log(objective.checklist)
+
+    if (objective.checklist % 2 === 0) {
+        console.log("no está hecho aún")
+    } else {
+        console.log("ya está hecho")
     }
 }
 
@@ -458,7 +495,7 @@ function add_objective() {
             description: obj_description.value,
             dueDate: obj_due_date.value,
             priority: priority.value,
-            checklist: [],
+            checklist: 0,
             quest: select_quest.value,
         };
 
@@ -500,6 +537,11 @@ function add_objective() {
 
         console.log("esta es la array objectives antes de borrar un obj", objectives);
 
+        console.log("lets see", last_obj.checklist)
+
+        for (let i = 0; i < 5; i++) { //?
+            check_objective(last_obj);
+        }
     });
 };
 
@@ -509,7 +551,8 @@ add_quest();
 
 /* 
 So now the pending tasks are:
-1. check objectives & delete them
+1. check objectives & delete them // use the two functions. 
+    // Sólo falta unir en el delete y hacer el listener y unir en el check
 2. Refactorizar
 7. @media queries
 */
