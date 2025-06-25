@@ -4,6 +4,7 @@
  import "./assets/css/styles.css";
 
  import trash from "./assets/images/trash.svg" 
+ import edit from "./assets/images/edit.svg";
 
 import { formatDistance, formatDistanceToNow, subDays, format, roundToNearestHours } from "date-fns";
 
@@ -118,7 +119,6 @@ function make_list() {
         ul.appendChild(a);
     });
 
-    // Actualiza los listeners después de regenerar la lista
     update_listeners();
 }
 
@@ -137,7 +137,7 @@ function update_listeners() {
     });
 }
 
-make_list(); // ?
+make_list(); 
 
 function display_notes() {
 
@@ -163,10 +163,9 @@ function display_notes() {
 
 display_notes();
 
-// let delete_obj_btns = document.querySelectorAll(".delete-obj");
 let quest_objectives = document.getElementById("objectives-list");
 
-function delete_objective(title) { //This will be passed to the listener
+function delete_objective(title) { 
 
     const objIndex = objectives.findIndex((objective) => objective.title === title);
     if (objIndex !== -1) {
@@ -184,12 +183,13 @@ function delete_objective(title) { //This will be passed to the listener
 
             display_quest(quest);
 
-
         }
     })
 }
 
-function check_objective(title, mark) { // good
+function check_objective(title, mark) {  //Utilizar el objective, dame el  //haz esto con filter
+                                         // quest en la que estoy
+    // const objIndex = objective.filter
 
     const objIndex = objectives.findIndex((objective) => objective.title === title);
 
@@ -204,6 +204,7 @@ function check_objective(title, mark) { // good
     }
 }
 
+//Desde aquí controlo los listeners de los objectives
 quest_objectives.addEventListener("click", (event) => {
     if (event.target.closest(".delete-obj")) {
 
@@ -211,15 +212,28 @@ quest_objectives.addEventListener("click", (event) => {
 
         delete_objective(obj_title)
     } else if (event.target.closest(".checkbox")) {
-        let obj_title = event.target.closest(".checkbox").parentNode.children[1].innerText
-        let mark = event.target.closest(".checkbox").parentNode.children[1]
 
-        check_objective(obj_title, mark);
+        let base = event.target;
+
+        let checkbox_index = base.getAttribute("data-check_index");
+        let objective_index = base.parentNode.getAttribute("data-index");
+
+        if  (checkbox_index === objective_index ) {
+
+            let obj_title = event.target.closest(".checkbox").parentNode.children[1].innerText
+            let mark = event.target.closest(".checkbox").parentNode.children[1]
+
+            check_objective(obj_title, mark);
+        }
+    } else if (event.target.closest(".edit-obj")) {
+
+        let edit_obj = document.getElementById("something-else");
+
+        edit_obj.style.display = "block";
+        edit_obj.showModal();
+
     }
 });
-
-// console.log("this is typeof ",  delete_obj_btns, typeof delete_obj_btns)
-// make it an array
 
 let refresh_quest_options = function() {
     const select_quest = document.getElementById("select-quest");
@@ -244,7 +258,10 @@ function  formated_date(obj) {
 
 function display_objectives(quest) {
 
-    let dataCounter = 0; //???
+    let dataCounter = 0; 
+    let deleteCounter = 0;
+    let checkCounter = 0;
+
     quest_objectives.innerHTML = "";
 
     quest.objectives.forEach((objective) => {
@@ -252,16 +269,28 @@ function display_objectives(quest) {
         let checkbox = document.createElement("input");
         checkbox.setAttribute("type", "checkbox")
         checkbox.classList.add("checkbox");
+        checkbox.dataset.check_index = checkCounter++;
 
         // creating the delete obj btn
         let deleteButton = document.createElement("button");
         deleteButton.classList.add("delete-obj");
+        deleteButton.dataset.delete_index = deleteCounter++;
         let deleteImage = document.createElement("img");
         deleteImage.src = trash;
         deleteImage.width = "20";
         deleteImage.height = "20";
 
         deleteButton.appendChild(deleteImage);
+
+        let editButton = document.createElement("button");
+        editButton.classList.add("edit-obj");
+        editButton.classList.add("open-dialog");
+        let editImage = document.createElement("img");
+        editImage.src = edit;
+        editImage.width = "20";
+        editImage.height = "20";
+
+        editButton.appendChild(editImage);
 
         // creating the obj item itself
         let item = document.createElement("li");
@@ -278,6 +307,7 @@ function display_objectives(quest) {
         item.appendChild(checkbox);
         item.appendChild(title);
         item.appendChild(priority);
+        item.appendChild(editButton);
         item.appendChild(dueDate);
         item.appendChild(deleteButton);
         item.classList.add("objective");
@@ -444,11 +474,12 @@ function add_note() {
     });
 };
 
-// Now how the i organize the code
-
 // Open and close modals
 Array.from(open_dialog).forEach((btn) => {
-    btn.addEventListener("click", (event) => {
+    btn.addEventListener("click", () => {
+
+        console.log(modals);
+
         switch (btn.id) {
             case "new-objective":
                 modals[0].style.display = "block";
@@ -464,15 +495,16 @@ Array.from(open_dialog).forEach((btn) => {
                 modals[2].showModal();
                 break;
         }
+
+    if (btn.classList.contains("open-dialog")) {
+        console.log("you clicked the edit objective button");
+    }  
+        
     });
 });
 
 let obj_title_input = document.getElementById("obj-title");
  
-function link_objective_to_quest() {
-
-}
-
 const select_quest = document.getElementById("select-quest");
 const obj_title = document.getElementById("obj-title");
 const obj_description = document.getElementById("obj-description");
@@ -482,10 +514,6 @@ const priority = document.getElementById("priority");
 obj_due_date.value = format(new Date(), "yyyy-MM-dd"); // Set default due date to today
 
 let objs_form = document.getElementById("objective-form");
-
-function check_obj() { //
-
-}
 
 function updateObjsLocalStorage() {
     localStorage.setItem("objectives", JSON.stringify(objectives));
@@ -502,6 +530,16 @@ function add_objective() {
             checklist: 0,
             quest: select_quest.value,
         };
+
+        const objExists = objectives.some((objective) => objective.title === formData.title);
+        if (objExists) {
+            alert("amigo sigue caminando");
+
+            modals[0].style.display = "none";
+            modals[0].close();
+
+            return null;
+        }
 
         let new_obj = create_objective(formData);
         objectives.push(new_obj);
@@ -522,11 +560,12 @@ function add_objective() {
         event.preventDefault();
 
         let last_obj = create_new_objective();
-        formated_date(last_obj);
 
         if (!last_obj) {
             return;
         }
+        
+        formated_date(last_obj);
 
         updateObjsLocalStorage();
         montage_to_quest(last_obj);
@@ -536,10 +575,9 @@ function add_objective() {
                 display_quest(quest)
             } 
         })
+        // console.log("esta es la array objectives antes de borrar un obj", objectives);
 
-        console.log("esta es la array objectives antes de borrar un obj", objectives);
-
-        console.log("lets see", last_obj.checklist)
+        // console.log("lets see", last_obj.checklist)
     });
 };
 
@@ -553,10 +591,12 @@ So now the pending tasks are:
 1. Solucionar el problema del check con objectives del mismo nombre
 2. Modal de cada objective
 
+- Leer lo que dijo Copilot acerca del hoisted
 
 2. Refactorizar
 3. modales
 4. css obj item
+--. Error calendario, no permitir fechas pasadas
 5. Filtrar según prioridad, fecha  
 7. @media queries
 8. icons

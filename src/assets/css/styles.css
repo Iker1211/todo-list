@@ -341,7 +341,7 @@ input:valid, textarea:valid {
 }
 
         .due-date {
-         margin-left: auto; 
+         /* margin-left: auto;  */
          margin-right: 0.5rem;
         }
 
@@ -354,6 +354,11 @@ input:valid, textarea:valid {
           background-color: red;
           justify-self: end;
           margin: 1px;
+        }
+
+        .edit-obj {
+          background-color: var(--green);
+          margin-right: 0.5rem;
         }
     }
  }
