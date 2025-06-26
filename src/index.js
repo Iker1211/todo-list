@@ -401,7 +401,7 @@ function add_quest() {
 
         const questExists = quests.some((quest) => quest.name === formData.name);
         if (questExists) {
-            alert("amigo sigue caminando");
+            alert("'Every child is an artist. The problem is how to remain an artist once we grow up.' – Pablo Picasso");
 
             modals[1].style.display = "none";
             modals[1].close();
@@ -462,7 +462,7 @@ function add_note() {
 
         const noteExists = notes.some((note) => note.title === formData.title);
         if (noteExists) {
-            alert("amigo sigue caminando");
+            alert("'Every child is an artist. The problem is how to remain an artist once we grow up.' – Pablo Picasso");
 
             modals[2].style.display = "none";
             modals[2].close();
@@ -634,16 +634,12 @@ control_objectives();
 /* 
 So now the pending tasks are:
 
-2. Modal de cada objective
-. Función editar objective
-
 - Leer lo que dijo Copilot acerca del hoisted
 
 2. Refactorizar
 3. modales
 4. css obj item
 --. Error calendario, no permitir fechas pasadas
-5. Filtrar según prioridad, fecha  
 7. @media queries
 8. icons
 */
