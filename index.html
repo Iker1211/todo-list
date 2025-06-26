@@ -120,31 +120,31 @@
 
                 <div id="objectives-list"> Objetivos</div>
                 <dialog  id="something-else" class="modal">
-                    <h3>Edit Objective 🪖</h3>
-                    <form id="objective-form" action="" method="dialog">
+                    <h3>Edit Objective ✏️</h3>
+                    <form id="edit-objective-form" action="" method="dialog">
                             <p>
-                                <label for="obj-title">Title</label>
-                                <input type="text" id="obj-title" name="obj-title" required>
+                                <label for="edit-obj-title">Title</label>
+                                <input type="text" id="edit-obj-title" name="obj-title" required>
                             </p>
                             <p>
-                                <label for="obj-description">Description</label>
-                                <textarea id="obj-description" name="obj-description" required></textarea>
+                                <label for="edit-obj-description">Description</label>
+                                <textarea id="edit-obj-description" name="obj-description" required></textarea>
                             </p>
                             <p>
-                                <label for="duedate">DueDate</label>
-                                <input type="date" id="duedate" name="duedate" required>
+                                <label for="edit-duedate">DueDate</label>
+                                <input type="date" id="edit-dueDate" name="duedate" required>
                             </p>
                             <p>
-                                <label for="priority">Priority</label>
-                                <select name="priority" id="priority" required>
+                                <label for="edit-priority">Priority</label>
+                                <select name="edit-priority" id="edit-priority" required>
                                     <option value="🚨">Urgente 🚨</option>
                                     <option value="⚡">Media ⚡</option>
                                     <option value="🌟">Opcional 🌟</option>
                                 </select>
                             </p>
                         <div class="form-buttons-container">
-                            <button type="submit" class="close-modal">Add</button>
-                            <button type="reset" id="cancel-obj" class="close-modal">Cancel</button>
+                            <button type="submit" class="close-modal">Confirm Edit</button>
+                            <button type="reset" id="cancel-edit-obj" class="close-modal">Cancel</button>
                         </div>
                     </form>
                 </dialog>
