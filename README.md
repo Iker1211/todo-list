@@ -8,7 +8,6 @@ Features
 - Delete a todo.
 
 Future feature ideas to implement.
-- Sort by date / priority.
 - Create logins and allow shared projects / notes between users.
 
 ## Skills

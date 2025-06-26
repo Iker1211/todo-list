@@ -8,10 +8,6 @@
 
 import { formatDistance, formatDistanceToNow, subDays, format, roundToNearestHours } from "date-fns";
 
-import Note from "./notes/notes.js";
-import Objective from "./objectives/objective.js";
-import Quest from "./quests/quest.js";
-
 import { create_note } from "./notes/notes.js";
 import { create_objective } from "./objectives/objective.js";
 import { create_quest } from "./quests/quest.js";
@@ -165,6 +161,16 @@ display_notes();
 
 let quest_objectives = document.getElementById("objectives-list");
 
+let edit_objective_form =document.getElementById("edit-objective-form"); 
+
+let edit_obj_title = document.getElementById("edit-obj-title");
+let edit_obj_description = document.getElementById("edit-obj-description");
+let edit_obj_dueDate = document.getElementById("edit-dueDate");
+
+edit_obj_dueDate.value = format(new Date(), "yyyy-MM-dd");
+
+let edit_obj_priority = document.getElementById("edit-priority");
+
 function delete_objective(title) { 
 
     const objIndex = objectives.findIndex((objective) => objective.title === title);
@@ -187,9 +193,7 @@ function delete_objective(title) {
     })
 }
 
-function check_objective(title, mark) {  //Utilizar el objective, dame el  //haz esto con filter
-                                         // quest en la que estoy
-    // const objIndex = objective.filter
+function check_objective(title, mark) {  
 
     const objIndex = objectives.findIndex((objective) => objective.title === title);
 
@@ -205,10 +209,13 @@ function check_objective(title, mark) {  //Utilizar el objective, dame el  //haz
 }
 
 //Desde aquí controlo los listeners de los objectives
-quest_objectives.addEventListener("click", (event) => {
+function control_objectives() {
+    
+    quest_objectives.addEventListener("click", (event) => {
+
     if (event.target.closest(".delete-obj")) {
 
-        let obj_title = event.target.closest(".delete-obj").parentNode.children[1].innerText
+       let obj_title = event.target.closest(".delete-obj").parentNode.children[1].innerText
 
         delete_objective(obj_title)
     } else if (event.target.closest(".checkbox")) {
@@ -227,13 +234,22 @@ quest_objectives.addEventListener("click", (event) => {
         }
     } else if (event.target.closest(".edit-obj")) {
 
+        let base = event.target;
+
         let edit_obj = document.getElementById("something-else");
+
+        let obj_title = base.parentNode.parentNode.children[1].innerText;
+
+        prefill_edit_form(obj_title);
+        edit_objective(obj_title);
 
         edit_obj.style.display = "block";
         edit_obj.showModal();
 
     }
 });
+
+}
 
 let refresh_quest_options = function() {
     const select_quest = document.getElementById("select-quest");
@@ -502,8 +518,6 @@ Array.from(open_dialog).forEach((btn) => {
         
     });
 });
-
-let obj_title_input = document.getElementById("obj-title");
  
 const select_quest = document.getElementById("select-quest");
 const obj_title = document.getElementById("obj-title");
@@ -519,6 +533,40 @@ function updateObjsLocalStorage() {
     localStorage.setItem("objectives", JSON.stringify(objectives));
 }
 
+function prefill_edit_form(title) {
+
+    const objIndex = objectives.filter((objective) => objective.title === title);
+
+    edit_obj_title.value = objIndex[0].title;
+    edit_obj_description.value = objIndex[0].description;
+    edit_obj_priority.value = objIndex[0].priority;
+}
+
+function edit_objective(title) {
+
+    const objIndex = objectives.filter((objective) => objective.title === title);
+
+    console.table("this is the object", objIndex[0]);
+
+    edit_objective_form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    objIndex[0].title = edit_obj_title.value;
+    objIndex[0].description = edit_obj_description.value;
+    objIndex[0].priority = edit_obj_priority.value;
+    objIndex[0].dueDate = edit_obj_dueDate.value;
+
+    quests.forEach((quest) => {
+        if (quest.name === quest_name.textContent ) {
+            display_quest(quest);
+        }
+    })
+
+    updateQuestLocalStorage();
+    updateObjsLocalStorage();
+    });
+}
+ 
 function add_objective() {
 
     function create_new_objective() {
@@ -575,21 +623,19 @@ function add_objective() {
                 display_quest(quest)
             } 
         })
-        // console.log("esta es la array objectives antes de borrar un obj", objectives);
-
-        // console.log("lets see", last_obj.checklist)
     });
 };
 
 add_note();
 add_objective();
 add_quest();
+control_objectives();
 
 /* 
 So now the pending tasks are:
 
-1. Solucionar el problema del check con objectives del mismo nombre
 2. Modal de cada objective
+. Función editar objective
 
 - Leer lo que dijo Copilot acerca del hoisted
 

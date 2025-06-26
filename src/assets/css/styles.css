@@ -120,7 +120,7 @@ input:valid, textarea:valid {
         width: 25%;
       } */
     
-      button[id="cancel"], button[id="cancel-obj"], button[id="cancel-note"] {
+      button[id="cancel"], button[id="cancel-obj"], button[id="cancel-edit-obj"], button[id="cancel-note"] {
         background-color: var(--red);
       }
       
@@ -324,7 +324,7 @@ input:valid, textarea:valid {
           display: flex;
           flex-direction: row;
           justify-content: space-between; 
-          background-color: yellow;
+          /* background-color: yellow; */
           padding: 0.3rem; 
           position: relative;
         }
